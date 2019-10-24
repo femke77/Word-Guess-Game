@@ -2,70 +2,82 @@
 //       numGuesses runs out and res array is missing 1 or more letters (has 1 or more '_'). (lose)
 
 
-// user input cases: user picks the same letter twice
-//                   user picks a non-alpha char
+// user input cases: user picks the same letter twice (ok - doesn't matter)
+//                   user picks a non-alpha char (needs coding)
 //                                      
 //--------------------------------------------------------------------------------------------------
 
+//  REFACTOR THIS CODE!!!!!!  --- REFACTOR THIS CODE!!!!!!!!!!!! ---- REFACTOR THIS CODE!!!!!!
+// proper documentation
+//theme will be cats
 
-
+//Fix the messages... 
 var wordArray = ["cat", "dog"];
+var resultArray = [];
+var incorrectGuessArray = [];
 var wordArrayIndex = 0;
-//win will be for guessing a word (e.g. filling out the resultArray) before guesses run out
 var wins = 0;
-
-//guesses could be done dynamically depending on word length????? 
 var numGuesses;
-
-//eventually this will be an array of words and we will go through the array for a game
 var word;
 
-//i think we will render the result at an array
-var resultArray = [];
 
-//show the user the wrong guesses
-var incorrectGuessArray = [];
-
-
-function renderNewWord(){
-    word = wordArray[wordArrayIndex];
-    resultArray = new Array(word.length).fill("_");
-    incorrectGuessArray = [];
-    numGuesses = 2;
-    
-    document.querySelector("#word").innerHTML = resultArray.join(" ");
+function renderWord() {
     document.querySelector("#wrongGuesses").innerHTML = " ";
-    
+    if (wordArrayIndex < wordArray.length) {
+        word = wordArray[wordArrayIndex];
+        resultArray = new Array(word.length).fill("_");
+        incorrectGuessArray = [];
+        numGuesses = 2;
+        document.querySelector("#word").innerHTML = resultArray.join(" ");
+        document.querySelector("#result").innerHTML = " ";
+
+    } else {
+        document.querySelector("#info").innerHTML = "Game OVER";
+        document.querySelector("#result").innerHTML = "You scored " + wins + " out of " + wordArray.length;
+        
+    }
+
+
 }
 
+function checkForLost(){
+    if (numGuesses === 0){
+        document.querySelector("#result").innerHTML = "No more guesses remaining.";
+        document.querySelector("#info").innerHTML = "The word was " + word + ". Try a new word."
+        wordArrayIndex++;
+        renderWord();
+    }
+}
 
-
-
-//if no more '_' in array and guesses > 0 user won
-function checkForWin() {
+function checkForWon() {
     var wonGame = true;
     resultArray.forEach((val) => {
         if (val === "_") {
             wonGame = false;
         }
     });
-    return wonGame;
+    if (wonGame) {
+        wins++;
+        document.querySelector("#won").innerHTML = "You won this round!";
+        wordArrayIndex++;
+        renderWord();
+    }
+
 }
-
-
 
 
 
 //------GAME------------------
 
-renderNewWord();
+renderWord();
 
 
 //will find all the matching char or let you know if no match, guesses only go down when user is wrong.                                   
 document.onkeyup = (event) => {
     var userGuess = event.key.toLowerCase();
     var match = false;
-    var gameWon = false;
+    document.querySelector("#won").innerHTML = " ";
+    //iterate over each character in the word with split then join back to array if match
     word.split("").forEach((val, index) => {
         if (userGuess === val) {
             match = true;
@@ -79,23 +91,10 @@ document.onkeyup = (event) => {
         document.querySelector("#result").innerHTML = "That letter is not in the word.";
         incorrectGuessArray.push(userGuess);
         document.querySelector("#wrongGuesses").innerHTML = incorrectGuessArray.join(" ");
-    }
-    gameWon = checkForWin();
-    if (gameWon) {
-        wins++;
-        document.querySelector("#result").innerHTML = "You won! Your score is " + wins + " out of " + wordArray.length;
-        wordArrayIndex++;
-        renderNewWord();
-    }
-    else if (numGuesses === 0) {
-        document.querySelector("#result").innerHTML = "No more guesses remaining.";
-        document.querySelector("#word").innerHTML = "The word was " + word;
-        wordArrayIndex++;
-        renderNewWord();
-
         
     }
+    checkForWon();
+    checkForLost();
     
 }
-
 
