@@ -1,19 +1,13 @@
-//win/lose cases: res array is full (no more '_') before numGuesses run out. (win)
-//       numGuesses runs out and res array is missing 1 or more letters (has 1 or more '_'). (lose)
 
+//TODO:  
+//       link to portfolio
+//       style
+//       JS documenting
+//       add cat theme
 
-// user input cases: user picks the same letter twice (ok - doesn't matter)
-//                   user picks a non-alpha char (needs coding)
-//                                      
-//--------------------------------------------------------------------------------------------------
+//Bonus: Add callbacks
 
-//  REFACTOR THIS CODE!!!!!!  --- REFACTOR THIS CODE!!!!!!!!!!!! ---- REFACTOR THIS CODE!!!!!!
-// proper documentation
-//theme will be cats
-
-//Fix the messages and add numGuesses remaining
-
-var wordArray = ["cat", "dog"];
+var wordArray = ["cat", "tiger"];
 var resultArray = [];
 var incorrectGuessArray = [];
 var wordArrayIndex = 0;
@@ -23,30 +17,26 @@ var word;
 
 
 function renderWord() {
-    document.querySelector("#wrongGuesses").innerHTML = " ";
+    //clear messages and incorrect guess array, re-up numGuesses, display underscores for new word
+    document.querySelector("#incorrect").innerHTML = " ";
+    document.querySelector("#gameResult").innerHTML = " ";
+    document.querySelector("#charResult").innerHTML = " ";
+    document.querySelector("#wordResult").innerHTML = " ";
     if (wordArrayIndex < wordArray.length) {
         word = wordArray[wordArrayIndex];
         resultArray = new Array(word.length).fill("_");
-        incorrectGuessArray = [];
+        incorrectGuessArray.length = 0;
         numGuesses = 2;
         document.querySelector("#word").innerHTML = resultArray.join(" ");
-        document.querySelector("#result").innerHTML = " ";
-
+    //if the word array is out of words, end the game
     } else {
-        document.querySelector("#info").innerHTML = "Game OVER";
-        document.querySelector("#result").innerHTML = "You scored " + wins + " out of " + wordArray.length;
-        
+        document.querySelector("#gameResult").innerHTML = "Game Over";
+        document.querySelector("#charResult").innerHTML = "You scored " + wins + " out of " + wordArray.length;        
     }
-
-
 }
 
-function checkForLost() {
-    var lost = false;
-    if (numGuesses === 0) {
-        lost = true;
-    }
-    return lost;
+function checkForLost(){
+    return (numGuesses === 0);
 }
 
 function checkForWon() {
@@ -68,38 +58,43 @@ renderWord();
 //will find all the matching char or let you know if no match, guesses only go down when user is wrong.                                   
 document.onkeyup = (event) => {
     var userGuess = event.key.toLowerCase();
-    var match = false;
-    var wonGame = false;
-    var lostGame = false;
-    document.querySelector("#won").innerHTML = " ";
-    //iterate over each character in the word with split then join back to array if match
+    var match = wonGame = lostGame = false;
+    document.querySelector("#gameResult").innerHTML = " ";
+    //iterate over each character in the word with split then join back to array if match after all "_" updated to char
     word.split("").forEach((val, index) => {
         if (userGuess === val) {
             match = true;
             resultArray[index] = val;
-            document.querySelector("#result").innerHTML = "Yes, " + userGuess + " is a correct guess!"
+            document.querySelector("#charResult").innerHTML = "Yes, " + userGuess + " is a correct guess!"
             document.querySelector("#word").innerHTML = resultArray.join(" ");
         }
     });
+    //if there is not a match, user loses a guess and the wrong guess renders
     if (!match) {
         numGuesses--;
-        document.querySelector("#result").innerHTML = "That letter is not in the word.";
+        document.querySelector("#charResult").innerHTML = "That letter is not in the word. " + numGuesses + " guess remaining.";
         incorrectGuessArray.push(userGuess);
-        document.querySelector("#wrongGuesses").innerHTML = incorrectGuessArray.join(" ");      
+        document.querySelector("#incorrect").innerHTML = incorrectGuessArray.join(" ");      
     }
+    //after each guess check if user won, if not, check if they lost and if so, give them the word
     wonGame = checkForWon();
     if (wonGame) {
         wins++;
-        document.querySelector("#won").innerHTML = "You won this round!";
+        document.querySelector("#gameResult").innerHTML = "You won this round!";
+        document.querySelector("#charResult").innerHTML = "";
     } else {
         lostGame = checkForLost();
         if (lostGame){
-            document.querySelector("#info").innerHTML = "The word was " + word + ". Try a new word."
+            document.querySelector("#wordResult").innerHTML = "The word was " + word + "."
         }
     }
-    if (wonGame || lostGame){
+    //if the game is won or lost, its over, so start a new word after a small timeout
+    if (wonGame || lostGame) {
         wordArrayIndex++;
-        renderWord();
+        setTimeout(() => {
+            renderWord()
+        }, 4000
+        )
     }
 }
 

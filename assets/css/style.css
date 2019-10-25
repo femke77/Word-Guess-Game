@@ -5,9 +5,11 @@ body {
 P {
     font-size: 18pt;
     color: black;
+    line-height: 30pt;
 }
 
 #word {
     font-size: 24pt;
-    color: blue;
+    color: green;
+    letter-spacing: 5px;
 }
