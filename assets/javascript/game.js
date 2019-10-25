@@ -11,7 +11,8 @@
 // proper documentation
 //theme will be cats
 
-//Fix the messages... 
+//Fix the messages and add numGuesses remaining
+
 var wordArray = ["cat", "dog"];
 var resultArray = [];
 var incorrectGuessArray = [];
@@ -40,31 +41,23 @@ function renderWord() {
 
 }
 
-function checkForLost(){
-    if (numGuesses === 0){
-        document.querySelector("#result").innerHTML = "No more guesses remaining.";
-        document.querySelector("#info").innerHTML = "The word was " + word + ". Try a new word."
-        wordArrayIndex++;
-        renderWord();
+function checkForLost() {
+    var lost = false;
+    if (numGuesses === 0) {
+        lost = true;
     }
+    return lost;
 }
 
 function checkForWon() {
-    var wonGame = true;
+    var won = true;
     resultArray.forEach((val) => {
         if (val === "_") {
-            wonGame = false;
+            won = false;
         }
     });
-    if (wonGame) {
-        wins++;
-        document.querySelector("#won").innerHTML = "You won this round!";
-        wordArrayIndex++;
-        renderWord();
-    }
-
+    return won;
 }
-
 
 
 //------GAME------------------
@@ -76,6 +69,8 @@ renderWord();
 document.onkeyup = (event) => {
     var userGuess = event.key.toLowerCase();
     var match = false;
+    var wonGame = false;
+    var lostGame = false;
     document.querySelector("#won").innerHTML = " ";
     //iterate over each character in the word with split then join back to array if match
     word.split("").forEach((val, index) => {
@@ -90,11 +85,21 @@ document.onkeyup = (event) => {
         numGuesses--;
         document.querySelector("#result").innerHTML = "That letter is not in the word.";
         incorrectGuessArray.push(userGuess);
-        document.querySelector("#wrongGuesses").innerHTML = incorrectGuessArray.join(" ");
-        
+        document.querySelector("#wrongGuesses").innerHTML = incorrectGuessArray.join(" ");      
     }
-    checkForWon();
-    checkForLost();
-    
+    wonGame = checkForWon();
+    if (wonGame) {
+        wins++;
+        document.querySelector("#won").innerHTML = "You won this round!";
+    } else {
+        lostGame = checkForLost();
+        if (lostGame){
+            document.querySelector("#info").innerHTML = "The word was " + word + ". Try a new word."
+        }
+    }
+    if (wonGame || lostGame){
+        wordArrayIndex++;
+        renderWord();
+    }
 }
 
