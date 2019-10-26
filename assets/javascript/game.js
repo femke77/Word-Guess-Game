@@ -1,11 +1,10 @@
 
 //TODO:  
-//       link to portfolio
-//       style
-//       JS documenting
-//       add cat theme
+//       link to portfolio with screen shot
+//       add cats to array and pick numGuesses
+//       readme.md
 
-//Bonus: Add callbacks
+//Bonus: Add callbacks, move incorrect guesses to a sidebar, make querySelector a var for each div
 
 var wordArray = ["cat", "tiger"];
 var resultArray = [];
