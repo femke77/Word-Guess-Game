@@ -1,12 +1,12 @@
 
 //TODO:  
 //       link to portfolio with screen shot
-//       add cats to array and pick numGuesses
-//       readme.md
+
 
 //Bonus: Add callbacks, move incorrect guesses to a sidebar, make querySelector a var for each div
 
-var wordArray = ["cat", "tiger"];
+var wordArray = ["persian", "bengal", "siamese", "sphynx", "abyssinian", "chartreux", "savannah", "himalayan", "ragamuffin", "peterbald", "ocicat", "korat",
+    "tonkinese", "lykoi", "burmilla"];
 var resultArray = [];
 var incorrectGuessArray = [];
 var wordArrayIndex = 0;
@@ -25,7 +25,7 @@ function renderWord() {
         word = wordArray[wordArrayIndex];
         resultArray = new Array(word.length).fill("_");
         incorrectGuessArray.length = 0;
-        numGuesses = 2;
+        numGuesses = 4;
         document.querySelector("#word").innerHTML = resultArray.join(" ");
     //if the word array is out of words, end the game
     } else {
@@ -71,7 +71,7 @@ document.onkeyup = (event) => {
     //if there is not a match, user loses a guess and the wrong guess renders
     if (!match) {
         numGuesses--;
-        document.querySelector("#charResult").innerHTML = "That letter is not in the word. " + numGuesses + " guess remaining.";
+        document.querySelector("#charResult").innerHTML = "That letter is not in the word. " + "&nbsp" +numGuesses + " guesses remaining.";
         incorrectGuessArray.push(userGuess);
         document.querySelector("#incorrect").innerHTML = incorrectGuessArray.join(" ");      
     }
@@ -84,7 +84,7 @@ document.onkeyup = (event) => {
     } else {
         lostGame = checkForLost();
         if (lostGame){
-            document.querySelector("#wordResult").innerHTML = "The word was " + word + "."
+            document.querySelector("#wordResult").innerHTML = "The word was " + "<span style='color:red'>" + word + "</span>" + ".";
         }
     }
     //if the game is won or lost, its over, so start a new word after a small timeout
