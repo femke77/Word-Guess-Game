@@ -26,7 +26,7 @@ function renderWord() {
         word = wordArray[wordArrayIndex];
         resultArray = new Array(word.length).fill("_");
         incorrectGuessArray.length = 0;
-        numGuesses = 4;
+        numGuesses = 4; //here is where you should try and make it dependent. You already have a word with the number of characters, maybe base it off of that :)
         wordID.innerHTML = resultArray.join(" ");
     
     //if the word array is out of words, end the game
