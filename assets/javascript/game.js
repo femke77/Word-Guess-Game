@@ -88,7 +88,7 @@ document.onkeyup = (event) => {
     } else {
         lostGame = checkForLost();
         if (lostGame){
-            word.innerHTML = "The word was " + "<span style='color:red'>" + word + "</span>" + ".";
+            wordResult.innerHTML = "The word was " + "<span style='color:red'>" + word + "</span>" + ".";
         }
     }
     
