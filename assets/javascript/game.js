@@ -11,6 +11,7 @@ var charResult = document.querySelector("#charResult");
 var wordResult = document.querySelector("#wordResult");
 var gameResult = document.querySelector("#gameResult");
 var wordID = document.querySelector("#word");
+var guessDisplay = document.querySelector("#numGuesses");
 
 function renderWord() {
     //we use the onkeyupHolder to detach event listening during the timeout transition
@@ -18,6 +19,7 @@ function renderWord() {
     document.onkeyupHolder = null;
     
     //clear messages and incorrect guess array, re-up numGuesses, display underscores for new word
+    guessDisplay.innerHTML = ""
     incorrect.innerHTML = " ";
     gameResult.innerHTML = " ";
     charResult.innerHTML = " ";
@@ -26,14 +28,28 @@ function renderWord() {
         word = wordArray[wordArrayIndex];
         resultArray = new Array(word.length).fill("_");
         incorrectGuessArray.length = 0;
-        numGuesses = 4; //here is where you should try and make it dependent. You already have a word with the number of characters, maybe base it off of that :)
+        numGuesses = getNumGuesses(); 
+        var guesses = document.createTextNode("You have " + numGuesses + " guesses for this word.");
+        guessDisplay.appendChild(guesses);
         wordID.innerHTML = resultArray.join(" ");
     
     //if the word array is out of words, end the game
     } else {
-        gameResult.innerHTML = "Game Over";
+        wordID.innerHTML = "";
+        gameResult.innerHTML = "Game Over!";
         charResult.innerHTML = "You scored " + wins + " out of " + wordArray.length;        
     }
+}
+
+function getNumGuesses(){
+    if (word.length < 5){
+        numGuesses = 2;
+    } else if ((word.length >= 5) && (word.length < 10)){
+        numGuesses = 3;
+    } else {
+        numGuesses = 4;
+    }
+    return numGuesses;
 }
 
 function checkForLost(){
