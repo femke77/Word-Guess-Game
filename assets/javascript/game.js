@@ -25,6 +25,7 @@ var incorrect = document.querySelector("#incorrect");
 var charResult = document.querySelector("#charResult");
 var wordResult = document.querySelector("#wordResult");
 var gameResult = document.querySelector("#gameResult");
+var incorrectGuessEl = document.querySelector("#guesses")
 var wordID = document.querySelector("#word");
 var guessDisplay = document.querySelector("#numGuesses");
 
@@ -69,6 +70,7 @@ function renderWord() {
     // display user info
     gameResult.innerHTML = "Game Over!";
     charResult.innerHTML = "You scored " + wins + " out of " + wordArray.length;
+    incorrectGuessEl.setAttribute("class", "hide")
   }
 }
 
@@ -81,10 +83,6 @@ function getNumGuesses() {
     numGuesses = 4;
   }
   return numGuesses;
-}
-
-function checkForLost() {
-  return numGuesses === 0;
 }
 
 function checkForWon() {
@@ -105,7 +103,7 @@ renderWord();
 //find all the matching char(s) or let user know if no match. guesses only go down when user is wrong.
 document.onkeyup = (event) => {
   var userGuess = event.key.toLowerCase();
-  var match = (wonGame = lostGame = false);
+  var match = wonGame = lostGame = false;
 
   // iterate over each character in the word with split then join back to array if match after all "_" updated to char
   word.split("").forEach((val, index) => {
@@ -131,16 +129,15 @@ document.onkeyup = (event) => {
 
   // after each guess check if user won, if not, check if they lost and if so, give them the word
   wonGame = checkForWon();
+
   if (wonGame) {
     wins++;
     gameResult.innerHTML = "You won this round!";
     charResult.innerHTML = "";
-  } else {
-    lostGame = checkForLost();
-    if (lostGame) {
+  } else if (numGuesses === 0) {
+      lostGame = true;
       wordResult.innerHTML =
-        "The word was " + "<span style='color:red'>" + word + "</span>" + ".";
-    }
+        "The word was " + "<span style='color:red'>" + word + "</span>" + ".";  
   }
 
   //if the game is won or lost, its over, so start a new word after a small timeout
@@ -154,4 +151,4 @@ document.onkeyup = (event) => {
   }
 };
 
-// TODO: detatch event listener at game over.
+

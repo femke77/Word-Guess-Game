@@ -32,3 +32,6 @@ P {
     margin-top: 20px;
 }
 
+.hide {
+    display: none;
+}
